@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saturday Worksheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --field:#16202B;
+  --field-lift:#1D2A38;
+  --slip:#EDE6D8;
+  --slip-shade:#DFD6C4;
+  --slip-edge:#C9BEA8;
+  --ink:#22303F;
+  --ink-soft:#5A6B7C;
+  --chalk:#EEF2F5;
+  --dim:#8A9AA9;
+  --amber:#E0913A;
+  --red:#B8503F;
+  --green:#4F8C61;
+}
+
+*{box-sizing:border-box}
+
+html{-webkit-text-size-adjust:100%}
+
+body{
+  margin:0;
+  background:var(--field);
+  color:var(--chalk);
+  font-family:'Archivo',system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.5;
+  padding:28px 18px 80px;
+}
+
+.wrap{max-width:660px;margin:0 auto}
+
+.num{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
+
+/* ---------- masthead ---------- */
+
+.masthead{margin-bottom:26px}
+
+.masthead h1{
+  font-size:clamp(30px,7vw,44px);
+  font-weight:700;
+  letter-spacing:-0.02em;
+  line-height:1.05;
+  margin:0 0 10px;
+}
+
+.dateline{
+  color:var(--dim);
+  font-size:14px;
+  margin:0 0 16px;
+}
+
+.level{
+  border-left:2px solid var(--amber);
+  padding:2px 0 2px 14px;
+  color:var(--dim);
+  font-size:14.5px;
+  line-height:1.55;
+  max-width:56ch;
+}
+
+.level strong{color:var(--chalk);font-weight:600}
+
+/* ---------- ticket surfaces ---------- */
+
+.slip{
+  background:var(--slip);
+  color:var(--ink);
+  border-radius:3px;
+  padding:20px 20px 22px;
+  margin-bottom:20px;
+  box-shadow:0 1px 0 var(--slip-edge), 0 14px 28px -18px rgba(0,0,0,.7);
+}
+
+.slip-head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:12px;
+  border-bottom:1px solid var(--slip-edge);
+  padding-bottom:9px;
+  margin-bottom:16px;
+}
+
+.slip-head h2{
+  font-size:17px;
+  font-weight:600;
+  margin:0;
+  letter-spacing:-0.01em;
+}
+
+.slip-head span{
+  font-size:12.5px;
+  color:var(--ink-soft);
+}
+
+.note{
+  font-size:13.5px;
+  color:var(--ink-soft);
+  line-height:1.5;
+  margin:14px 0 0;
+  max-width:58ch;
+}
+
+/* ---------- bankroll ---------- */
+
+.bank-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.bank-row label{font-size:14.5px;font-weight:500}
+
+input[type=number],input[type=text]{
+  font-family:'IBM Plex Mono',monospace;
+  font-variant-numeric:tabular-nums;
+  font-size:15px;
+  background:#FBF8F2;
+  border:1px solid var(--slip-edge);
+  border-radius:2px;
+  color:var(--ink);
+  padding:7px 9px;
+  width:100%;
+}
+
+input:focus-visible{outline:2px solid var(--amber);outline-offset:1px}
+
+#bankroll{width:130px}
+
+.ladder{display:grid;gap:1px;background:var(--slip-edge);border:1px solid var(--slip-edge)}
+
+.rung{
+  background:var(--slip);
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:10px;
+  padding:11px 13px;
+}
+
+.rung-name{font-size:14.5px}
+.rung-name em{font-style:normal;color:var(--ink-soft);font-size:13px}
+
+.rung-val{font-size:21px;font-weight:600}
+
+.rung.leash{background:var(--slip-shade)}
+.rung.leash .rung-val{color:var(--red)}
+
+/* ---------- board ---------- */
+
+.game{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:4px 14px;
+  align-items:center;
+  padding:12px 0;
+  border-bottom:1px solid var(--slip-edge);
+}
+
+.game:last-of-type{border-bottom:0}
+
+.matchup{font-size:15px;font-weight:500}
+.matchup .away{color:var(--ink-soft);font-weight:400}
+
+.bar{
+  grid-column:1/2;
+  height:5px;
+  background:var(--slip-shade);
+  border-radius:0;
+  overflow:hidden;
+  max-width:260px;
+}
+
+.bar i{display:block;height:100%;background:var(--ink)}
+.bar.tight i{background:var(--amber)}
+
+.figs{
+  grid-column:2/3;
+  grid-row:1/3;
+  text-align:right;
+  white-space:nowrap;
+}
+
+.figs b{font-size:19px;font-weight:600;display:block;line-height:1.15}
+.figs small{font-size:12.5px;color:var(--ink-soft)}
+
+.addleg{
+  background:none;
+  border:1px solid var(--slip-edge);
+  border-radius:2px;
+  color:var(--ink-soft);
+  font-family:inherit;
+  font-size:12.5px;
+  padding:4px 9px;
+  cursor:pointer;
+  margin-top:5px;
+}
+
+.addleg:hover,.addleg:focus-visible{background:var(--slip-shade);color:var(--ink)}
+.addleg[disabled]{opacity:.4;cursor:default}
+
+/* ---------- devig ---------- */
+
+.two-up{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+
+.field label{
+  display:block;
+  font-size:13px;
+  color:var(--ink-soft);
+  margin-bottom:5px;
+}
+
+.readout{
+  background:var(--slip-shade);
+  padding:13px 14px;
+  display:grid;
+  gap:7px;
+}
+
+.line{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14.5px}
+.line b{font-size:17px;font-weight:600}
+.line.cut b{color:var(--red)}
+
+/* ---------- parlay ---------- */
+
+.leg{
+  display:grid;
+  grid-template-columns:1fr 96px 30px;
+  gap:9px;
+  align-items:center;
+  padding:9px 0;
+  border-bottom:1px solid var(--slip-edge);
+}
+
+.leg-name{font-size:14.5px;line-height:1.3}
+.leg-name small{display:block;color:var(--ink-soft);font-size:12.5px}
+
+.drop{
+  background:none;
+  border:0;
+  color:var(--ink-soft);
+  font-size:19px;
+  cursor:pointer;
+  line-height:1;
+  padding:3px;
+}
+
+.drop:hover,.drop:focus-visible{color:var(--red)}
+
+.empty{
+  color:var(--ink-soft);
+  font-size:14px;
+  padding:16px 0;
+  border-bottom:1px solid var(--slip-edge);
+}
+
+.verdict{margin-top:16px;display:grid;gap:9px}
+
+.big{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:12px;
+  padding:13px 14px;
+  background:var(--ink);
+  color:var(--slip);
+}
+
+.big span{font-size:14px}
+.big b{font-size:26px;font-weight:700}
+
+.gap-good b{color:#8FD3A2}
+.gap-bad b{color:#F0917F}
+
+.manual{
+  margin-top:18px;
+  padding-top:16px;
+  border-top:1px solid var(--slip-edge);
+}
+
+.manual h3{font-size:14px;font-weight:600;margin:0 0 4px}
+.manual p{font-size:13px;color:var(--ink-soft);margin:0 0 12px;max-width:52ch}
+
+.manual-grid{display:grid;grid-template-columns:1fr 88px 88px auto;gap:9px;align-items:end}
+
+.btn{
+  background:var(--ink);
+  color:var(--slip);
+  border:0;
+  border-radius:2px;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:500;
+  padding:9px 15px;
+  cursor:pointer;
+}
+
+.btn:hover,.btn:focus-visible{background:#31465C}
+
+footer{
+  color:var(--dim);
+  font-size:13.5px;
+  line-height:1.6;
+  max-width:58ch;
+  margin-top:34px;
+}
+
+footer p{margin:0 0 10px}
+
+@media (max-width:560px){
+  .two-up{grid-template-columns:1fr}
+  .manual-grid{grid-template-columns:1fr 1fr;gap:9px}
+  .manual-grid .btn{grid-column:1/3}
+  .leg{grid-template-columns:1fr 84px 28px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <h1>Saturday worksheet</h1>
+    <p class="dateline num">September 5, 2026 &middot; early window</p>
+    <p class="level">
+      The percentages below come off the odds feed, not from a model of mine. Nobody
+      on this page has an edge on the market. What this does is the arithmetic —
+      <strong>what your book is charging you, and what a parlay is actually worth</strong> —
+      so you don't have to do it with a fried brain.
+    </p>
+  </div>
+
+  <!-- BANKROLL -->
+  <section class="slip">
+    <div class="slip-head">
+      <h2>What you're risking</h2>
+      <span>1 unit = 1% of roll</span>
+    </div>
+
+    <div class="bank-row">
+      <label for="bankroll">Bankroll for the weekend</label>
+      <input type="number" id="bankroll" value="500" min="0" step="10" inputmode="decimal">
+    </div>
+
+    <div class="ladder">
+      <div class="rung">
+        <span class="rung-name">One unit</span>
+        <span class="rung-val num" id="u-one">$5.00</span>
+      </div>
+      <div class="rung">
+        <span class="rung-name">Straight bet <em>1.0u</em></span>
+        <span class="rung-val num" id="u-straight">$5.00</span>
+      </div>
+      <div class="rung leash">
+        <span class="rung-name">Parlay <em>0.10u — your rule, hard stop</em></span>
+        <span class="rung-val num" id="u-parlay">$0.50</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOARD -->
+  <section class="slip">
+    <div class="slip-head">
+      <h2>Today's board</h2>
+      <span>11:00 AM CT kicks</span>
+    </div>
+    <div id="board"></div>
+    <p class="note">
+      Win probability is the home side's, straight from the feed. The odds next to it are
+      what a book would have to pay for that chance to be a break-even bet — no vig. Your
+      book will pay less. The gap is the whole business model.
+    </p>
+  </section>
+
+  <!-- DEVIG -->
+  <section class="slip">
+    <div class="slip-head">
+      <h2>What your book is charging</h2>
+      <span>both sides, any market</span>
+    </div>
+
+    <div class="two-up">
+      <div class="field">
+        <label for="dv-a">Odds on the side you like</label>
+        <input type="text" id="dv-a" value="-110" inputmode="text">
+      </div>
+      <div class="field">
+        <label for="dv-b">Odds on the other side</label>
+        <input type="text" id="dv-b" value="-110" inputmode="text">
+      </div>
+    </div>
+
+    <div class="readout">
+      <div class="line">
+        <span>Your side's real chance of winning</span>
+        <b class="num" id="dv-p">50.0%</b>
+      </div>
+      <div class="line">
+        <span>Break-even you need to hit</span>
+        <b class="num" id="dv-be">52.4%</b>
+      </div>
+      <div class="line cut">
+        <span>The book's cut on this game</span>
+        <b class="num" id="dv-hold">4.5%</b>
+      </div>
+    </div>
+
+    <p class="note">
+      Works on spreads, totals, moneylines — anything with two sides. If the cut is over
+      5%, shop it somewhere else before you fire.
+    </p>
+  </section>
+
+  <!-- PARLAY -->
+  <section class="slip">
+    <div class="slip-head">
+      <h2>Parlay slip</h2>
+      <span id="leg-count">0 legs</span>
+    </div>
+
+    <div id="legs"><p class="empty">Add legs from the board above, or build one by hand below.</p></div>
+
+    <div class="verdict" id="verdict"></div>
+
+    <div class="manual">
+      <h3>Add a game that isn't on the board</h3>
+      <p>
+        Enter both sides and it works out the real number itself — no guessing on your part.
+      </p>
+      <div class="manual-grid">
+        <div class="field">
+          <label for="m-name">Who you're taking</label>
+          <input type="text" id="m-name" placeholder="Texas -7.5">
+        </div>
+        <div class="field">
+          <label for="m-odds">Their odds</label>
+          <input type="text" id="m-odds" value="-110">
+        </div>
+        <div class="field">
+          <label for="m-opp">Other side</label>
+          <input type="text" id="m-opp" value="-110">
+        </div>
+        <button class="btn" id="m-add">Add leg</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      One thing the slip will show you over and over: stacking heavy favorites gives you a
+      high chance of winning very little, and every leg you add hands the book another cut.
+      That's why the 0.10u leash is the right instinct.
+    </p>
+    <p>
+      Refresh your actual lines before you bet — these are the morning numbers.
+    </p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------- games pulled from the odds feed ----------
+  var GAMES = [
+    {home:"Alabama",       away:"East Carolina",  p:96.4},
+    {home:"Syracuse",      away:"New Hampshire",  p:98.1},
+    {home:"Nebraska",      away:"Ohio",           p:94.7},
+    {home:"Houston",       away:"Oregon State",   p:91.7},
+    {home:"UConn",         away:"Lafayette",      p:91.3},
+    {home:"New Haven",     away:"Stonehill",      p:73.6},
+    {home:"James Madison", away:"Liberty",        p:68.9},
+    {home:"Bowling Green", away:"Tarleton State", p:54.2}
+  ];
+
+  // ---------- odds math ----------
+  function amToProb(a){
+    a = Number(a);
+    if(!isFinite(a) || a === 0) return NaN;
+    return a > 0 ? 100/(a+100) : -a/(-a+100);
+  }
+  function probToAm(p){
+    if(!(p > 0 && p < 1)) return NaN;
+    return p >= 0.5 ? -(100*p/(1-p)) : (100*(1-p)/p);
+  }
+  function amToDec(a){
+    a = Number(a);
+    if(!isFinite(a) || a === 0) return NaN;
+    return a > 0 ? 1 + a/100 : 1 + 100/(-a);
+  }
+  function decToAm(d){
+    if(!(d > 1)) return NaN;
+    return d >= 2 ? (d-1)*100 : -100/(d-1);
+  }
+  function fmtAm(a){
+    if(!isFinite(a)) return "—";
+    var r = Math.round(a);
+    return (r > 0 ? "+" : "") + r;
+  }
+  function money(n){
+    if(!isFinite(n)) return "—";
+    return "$" + n.toFixed(2);
+  }
+  function pct(p,d){
+    if(!isFinite(p)) return "—";
+    return (p*100).toFixed(d === undefined ? 1 : d) + "%";
+  }
+  function parseOdds(v){
+    var s = String(v).trim().replace(/\s/g,"");
+    if(s === "" || s === "-" || s === "+") return NaN;
+    var n = Number(s);
+    if(!isFinite(n) || n === 0) return NaN;
+    // guard the classic typo: "110" almost always means -110
+    if(n > 0 && n < 100) return NaN;
+    return n;
+  }
+
+  // ---------- bankroll ----------
+  var bankEl = document.getElementById("bankroll");
+
+  function unit(){
+    var b = Number(bankEl.value);
+    if(!isFinite(b) || b < 0) b = 0;
+    return b * 0.01;
+  }
+  function parlayStake(){ return unit() * 0.10; }
+
+  function paintBank(){
+    document.getElementById("u-one").textContent = money(unit());
+    document.getElementById("u-straight").textContent = money(unit());
+    document.getElementById("u-parlay").textContent = money(parlayStake());
+    paintVerdict();
+  }
+  bankEl.addEventListener("input", paintBank);
+
+  // ---------- board ----------
+  var boardEl = document.getElementById("board");
+
+  GAMES.forEach(function(g, i){
+    var p = g.p/100;
+    var row = document.createElement("div");
+    row.className = "game";
+
+    var tight = g.p < 65;
+
+    row.innerHTML =
+      '<div class="matchup">' + g.home +
+        ' <span class="away">vs ' + g.away + '</span>' +
+        '<br><button class="addleg" data-i="' + i + '">Add to slip</button>' +
+      '</div>' +
+      '<div class="bar' + (tight ? ' tight' : '') + '"><i style="width:' + g.p + '%"></i></div>' +
+      '<div class="figs">' +
+        '<b class="num">' + g.p.toFixed(1) + '%</b>' +
+        '<small class="num">fair ' + fmtAm(probToAm(p)) + '</small>' +
+      '</div>';
+
+    boardEl.appendChild(row);
+  });
+
+  boardEl.addEventListener("click", function(e){
+    var btn = e.target.closest(".addleg");
+    if(!btn) return;
+    var g = GAMES[Number(btn.dataset.i)];
+    addLeg({
+      name: g.home,
+      sub: "vs " + g.away,
+      p: g.p/100,
+      odds: Math.round(probToAm(g.p/100))
+    });
+    btn.disabled = true;
+    btn.textContent = "On the slip";
+  });
+
+  // ---------- devig ----------
+  var dvA = document.getElementById("dv-a"),
+      dvB = document.getElementById("dv-b");
+
+  function paintDevig(){
+    var a = parseOdds(dvA.value), b = parseOdds(dvB.value);
+    var pa = amToProb(a), pb = amToProb(b);
+    var out = { p:"—", be:"—", hold:"—" };
+
+    if(isFinite(pa) && isFinite(pb)){
+      var sum = pa + pb;
+      out.p    = pct(pa/sum);
+      out.be   = pct(pa);
+      out.hold = pct((sum-1)/sum, 2);
+    }
+    document.getElementById("dv-p").textContent    = out.p;
+    document.getElementById("dv-be").textContent   = out.be;
+    document.getElementById("dv-hold").textContent = out.hold;
+  }
+  dvA.addEventListener("input", paintDevig);
+  dvB.addEventListener("input", paintDevig);
+
+  // ---------- parlay ----------
+  var legs = [];
+  var legsEl    = document.getElementById("legs"),
+      verdictEl = document.getElementById("verdict"),
+      countEl   = document.getElementById("leg-count");
+
+  function addLeg(leg){
+    legs.push(leg);
+    paintLegs();
+  }
+
+  function paintLegs(){
+    countEl.textContent = legs.length + (legs.length === 1 ? " leg" : " legs");
+
+    if(!legs.length){
+      legsEl.innerHTML = '<p class="empty">Add legs from the board above, or build one by hand below.</p>';
+      paintVerdict();
+      return;
+    }
+
+    legsEl.innerHTML = "";
+    legs.forEach(function(leg, i){
+      var row = document.createElement("div");
+      row.className = "leg";
+      row.innerHTML =
+        '<div class="leg-name">' + leg.name +
+          '<small>' + leg.sub + ' &middot; ' + pct(leg.p) + ' to win</small></div>' +
+        '<input type="text" class="num leg-odds" data-i="' + i + '" value="' + leg.odds + '" aria-label="Book odds for ' + leg.name + '">' +
+        '<button class="drop" data-i="' + i + '" aria-label="Remove ' + leg.name + '">&times;</button>';
+      legsEl.appendChild(row);
+    });
+    paintVerdict();
+  }
+
+  legsEl.addEventListener("input", function(e){
+    var f = e.target.closest(".leg-odds");
+    if(!f) return;
+    legs[Number(f.dataset.i)].odds = f.value;
+    paintVerdict();
+  });
+
+  legsEl.addEventListener("click", function(e){
+    var b = e.target.closest(".drop");
+    if(!b) return;
+    var gone = legs.splice(Number(b.dataset.i), 1)[0];
+    // re-enable its board button if it came from there
+    Array.prototype.forEach.call(boardEl.querySelectorAll(".addleg"), function(btn){
+      if(GAMES[Number(btn.dataset.i)].home === gone.name){
+        btn.disabled = false;
+        btn.textContent = "Add to slip";
+      }
+    });
+    paintLegs();
+  });
+
+  function paintVerdict(){
+    if(!legs.length){ verdictEl.innerHTML = ""; return; }
+
+    var trueP = 1, bookDec = 1, ok = true;
+
+    legs.forEach(function(leg){
+      trueP *= leg.p;
+      var d = amToDec(parseOdds(leg.odds));
+      if(!isFinite(d)) ok = false; else bookDec *= d;
+    });
+
+    var stake   = parlayStake();
+    var fairDec = 1/trueP;
+
+    var html =
+      '<div class="line"><span>Real chance this hits</span>' +
+        '<b class="num">' + pct(trueP) + '</b></div>' +
+      '<div class="line"><span>What it should pay</span>' +
+        '<b class="num">' + fmtAm(decToAm(fairDec)) + '</b></div>';
+
+    if(ok){
+      var edge = (bookDec * trueP) - 1;     // expected return per $1
+      var shortfall = 1 - (bookDec/fairDec); // how much of fair value you're handed back
+
+      html +=
+        '<div class="line"><span>What your book pays</span>' +
+          '<b class="num">' + fmtAm(decToAm(bookDec)) + '</b></div>' +
+        '<div class="line cut"><span>Value you are handing over</span>' +
+          '<b class="num">' + pct(shortfall, 1) + '</b></div>' +
+        '<div class="big ' + (edge > 0 ? 'gap-good' : 'gap-bad') + '">' +
+          '<span>Risk ' + money(stake) + ' at 0.10u<br>to bring back ' + money(stake*bookDec) + '</span>' +
+          '<b class="num">' + (edge > 0 ? '+' : '') + (edge*100).toFixed(1) + '%</b>' +
+        '</div>' +
+        '<p class="note">That last number is your expected return per dollar. Below zero means ' +
+        'the bet loses money over time even when this particular ticket cashes.</p>';
+    } else {
+      html += '<p class="note">Fill in every leg with real odds (like -110 or +145) to see the payout.</p>';
+    }
+
+    verdictEl.innerHTML = html;
+  }
+
+  // ---------- manual leg ----------
+  document.getElementById("m-add").addEventListener("click", function(){
+    var name = document.getElementById("m-name").value.trim() || "Unnamed pick";
+    var a = parseOdds(document.getElementById("m-odds").value);
+    var b = parseOdds(document.getElementById("m-opp").value);
+    var pa = amToProb(a), pb = amToProb(b);
+
+    if(!isFinite(pa) || !isFinite(pb)){
+      alert("Both sides need real odds — something like -110 or +145.");
+      return;
+    }
+
+    addLeg({
+      name: name,
+      sub: "de-vigged from both sides",
+      p: pa/(pa+pb),
+      odds: Math.round(a)
+    });
+
+    document.getElementById("m-name").value = "";
+  });
+
+  // ---------- go ----------
+  paintBank();
+  paintDevig();
+})();
+</script>
+</body>
+</html>
