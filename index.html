@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Week 2 Board — Sept 10-12, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>  :root{
+    --ink:#16181c;
+    --ink-2:#5d646e;
+    --line:#dcdfe4;
+    --line-soft:#eaecef;
+    --chrome:#f4f5f7;
+    --col:24px;
+    --row:76px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:#fff;
+    color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1560px;margin:0 auto;padding:32px 20px 72px}
+
+  /* masthead */
+  .mast{
+    border-bottom:3px solid var(--ink);
+    padding-bottom:14px;margin-bottom:6px;
+    display:flex;flex-wrap:wrap;align-items:flex-end;gap:18px 30px;
+  }
+  .mast h1{
+    font-family:"Barlow Condensed",sans-serif;font-weight:700;
+    font-size:clamp(38px,6.4vw,64px);line-height:.9;
+    letter-spacing:.01em;text-transform:uppercase;margin:0;white-space:nowrap;
+  }
+  .mast h1 em{font-style:normal;color:var(--ink-2)}
+  .mast .meta{
+    font-family:"IBM Plex Mono",monospace;font-size:11.5px;line-height:1.75;
+    color:var(--ink-2);letter-spacing:.03em;text-transform:uppercase;padding-bottom:4px;
+  }
+  .mast .meta b{color:var(--ink);font-weight:600}
+  .kicker{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--ink-2);margin:0 0 26px;
+  }
+
+  /* section headers */
+  .sec{display:flex;align-items:baseline;gap:14px;margin:46px 0 14px}
+  .sec h2{
+    font-family:"Barlow Condensed",sans-serif;font-weight:600;
+    text-transform:uppercase;letter-spacing:.06em;font-size:24px;margin:0;
+  }
+  .sec p{margin:0;font-size:12.5px;color:var(--ink-2)}
+
+  /* grid */
+  .scroller{
+    overflow-x:auto;border:1px solid var(--line);background:#fff;
+    -webkit-overflow-scrolling:touch;
+  }
+  .grid{display:grid;grid-template-columns:130px repeat(62,var(--col));min-width:1618px}
+  .hcell{
+    grid-row:1;height:32px;display:flex;align-items:center;justify-content:center;
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:500;
+    letter-spacing:.05em;color:var(--ink-2);background:var(--chrome);
+    border-left:1px solid var(--line-soft);border-bottom:1px solid var(--line);
+  }
+  .hcell.zone{
+    grid-column:1;justify-content:flex-start;padding-left:12px;
+    color:var(--ink);font-weight:600;letter-spacing:.14em;border-left:none;
+  }
+  .net{
+    grid-column:1;display:flex;flex-direction:column;justify-content:center;
+    padding:0 12px;min-height:var(--row);
+    border-bottom:1px solid var(--line-soft);background:var(--chrome);
+  }
+  .net span{
+    font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:18px;
+    text-transform:uppercase;line-height:1;letter-spacing:.02em;
+  }
+  .net small{
+    font-family:"IBM Plex Mono",monospace;font-size:9.5px;color:var(--ink-2);
+    margin-top:4px;letter-spacing:.05em;
+  }
+  .track{
+    border-left:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);
+    min-height:var(--row);
+  }
+  .game{
+    z-index:2;margin:7px 3px;
+    border:1px solid var(--line);border-left:4px solid var(--ink);
+    padding:8px 11px;display:flex;flex-direction:column;justify-content:center;
+    overflow:hidden;
+  }
+  .game .m{
+    font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:16.5px;
+    line-height:1.05;text-transform:uppercase;letter-spacing:.01em;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .game .m .at{color:var(--ink-2);font-weight:500}
+  .game .m .rk{color:#a4341f;font-weight:700}
+  .game .r{
+    display:flex;justify-content:space-between;gap:8px;margin-top:5px;
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+  }
+  .game .r .t{color:var(--ink-2)}
+  .game .r .s{color:var(--ink);font-weight:600;white-space:nowrap}
+  .game .r .s.none{color:var(--ink-2);font-weight:400}
+  .game.dbl{padding:5px 9px;gap:4px}
+  .game.dbl .half{border-left:2px solid rgba(0,0,0,.22);padding-left:7px}
+  .game.dbl .m{font-size:13.5px}
+  .game.dbl .r{margin-top:2px;font-size:9.5px}
+
+  /* board table */
+  .board{width:100%;border-collapse:collapse;font-size:13.5px}
+  .board thead th{
+    text-align:left;font-family:"IBM Plex Mono",monospace;font-size:10px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--ink);font-weight:500;
+    padding:0 10px 9px;border-bottom:2px solid var(--ink);white-space:nowrap;
+  }
+  .board tbody tr{border-left:4px solid var(--ink)}
+  .board tbody td{
+    padding:9px 10px;border-bottom:1px solid var(--line-soft);vertical-align:baseline;
+  }
+  .tm{font-family:"IBM Plex Mono",monospace;font-size:12px;white-space:nowrap;color:var(--ink-2)}
+  .mu{
+    font-family:"Barlow Condensed",sans-serif;font-size:17px;font-weight:600;
+    text-transform:uppercase;letter-spacing:.01em;line-height:1.1;
+  }
+  .mu .at{color:var(--ink-2);font-weight:500}
+  .mu .rk{color:#a4341f;font-weight:700}
+  .mu .note{
+    display:block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;
+    letter-spacing:.03em;color:var(--ink-2);text-transform:none;
+    font-weight:400;margin-top:2px;
+  }
+  .ch{font-size:12.5px;color:var(--ink);white-space:nowrap}
+  .ch.stream{color:var(--ink-2)}
+  .sp{font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:600;color:var(--ink);white-space:nowrap}
+  .sp.none{color:var(--ink-2);font-weight:400}
+  .band td{
+    background:#fff!important;font-family:"IBM Plex Mono",monospace;font-size:10px;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);
+    padding:14px 10px 5px;border-bottom:1px solid var(--line);
+  }
+  .board tbody tr.band{border-left:4px solid transparent}
+
+  /* footer */
+  .foot{
+    margin-top:50px;padding-top:20px;border-top:2px solid var(--ink);
+    display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));
+  }
+  .foot h3{
+    font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--ink);margin:0 0 8px;font-weight:600;
+  }
+  .foot p{margin:0;font-size:12.5px;line-height:1.65;color:var(--ink-2)}
+  .foot p b{color:var(--ink);font-weight:600}
+
+  .hint{
+    display:none;font-family:"IBM Plex Mono",monospace;font-size:10px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin:8px 0 0;
+  }
+  @media (max-width:1100px){ .hint{display:block} }
+  @media (max-width:640px){
+    .wrap{padding:22px 14px 56px}
+    .board thead{display:none}
+    .board tbody td{display:block;padding:3px 10px;border:none}
+    .board tbody tr{display:block;padding:10px 0;border-bottom:1px solid var(--line-soft)}
+    .band td{display:block!important}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="kicker">2026 Season &middot; Week 2</p>
+
+  <div class="mast">
+    <h1>Sept 10<br><em>&ndash; Sept 12</em></h1>
+    <div class="meta">
+      All times <b>Central</b> &middot; Nashville<br>
+      <b>116 games</b> &middot; 80 with a posted line<br>
+      Lines as of <b>Tue, Sept 8</b> &middot; each row washed in the <b>home</b> team's color
+    </div>
+  </div>
+
+  <div class="sec"><h2>Saturday on television</h2>
+    <p>The 43 Saturday games on linear networks. Streaming games are in the full board below.</p></div>
+  <p class="hint">&larr; Scroll the grid sideways &rarr;</p>
+  <div class="scroller"><div class="grid">
+<div class="hcell zone" style="grid-column:1">Central</div>
+<div class="hcell" style="grid-column:2/span 4">11 AM</div>
+<div class="hcell" style="grid-column:6/span 4">12 PM</div>
+<div class="hcell" style="grid-column:10/span 4">1 PM</div>
+<div class="hcell" style="grid-column:14/span 4">2 PM</div>
+<div class="hcell" style="grid-column:18/span 4">3 PM</div>
+<div class="hcell" style="grid-column:22/span 4">4 PM</div>
+<div class="hcell" style="grid-column:26/span 4">5 PM</div>
+<div class="hcell" style="grid-column:30/span 4">6 PM</div>
+<div class="hcell" style="grid-column:34/span 4">7 PM</div>
+<div class="hcell" style="grid-column:38/span 4">8 PM</div>
+<div class="hcell" style="grid-column:42/span 4">9 PM</div>
+<div class="hcell" style="grid-column:46/span 4">10 PM</div>
+<div class="hcell" style="grid-column:50/span 4">11 PM</div>
+<div class="hcell" style="grid-column:54/span 4">12 AM</div>
+<div class="hcell" style="grid-column:58/span 4">1 AM</div>
+<div class="net" style="grid-row:2"><span>Big Ten Network</span><small>6 games</small></div>
+<div class="track" style="grid-row:2;grid-column:2/span 62"></div>
+<div class="game" style="grid-row:2;grid-column:2/span 13;border-left-color:#990000;background:linear-gradient(90deg,#d69999 0%,#efd6d6 34%,#fff 76%)"><div class="m">Howard <span class="at">at</span> <span class="rk">#6</span> Indiana</div><div class="r"><span class="t">11:00 AM</span><span class="s">INDIANA -55.5</span></div></div>
+<div class="game dbl" style="grid-row:2;grid-column:16/span 13;border-left-color:#4B2E83;background:linear-gradient(90deg,#b7abcd 0%,#e2deeb 34%,#fff 76%)"><div class="half"><div class="m">Utah State <span class="at">at</span> <span class="rk">#17</span> Washington</div><div class="r"><span class="t">2:30 PM</span><span class="s">WASHINGTON -26.5</span></div></div><div class="half"><div class="m">Eastern Michigan <span class="at">at</span> Michigan State</div><div class="r"><span class="t">2:30 PM</span><span class="s">MICH STATE -17.5</span></div></div></div>
+<div class="game dbl" style="grid-row:2;grid-column:31/span 13;border-left-color:#2D68C4;background:linear-gradient(90deg,#abc3e7 0%,#dde7f6 34%,#fff 76%)"><div class="half"><div class="m">San Diego State <span class="at">at</span> UCLA</div><div class="r"><span class="t">6:15 PM</span><span class="s">UCLA -11.5</span></div></div><div class="half"><div class="m">Western Illinois <span class="at">at</span> Wisconsin</div><div class="r"><span class="t">6:15 PM</span><span class="s none">no line</span></div></div></div>
+<div class="game" style="grid-row:2;grid-column:46/span 13;border-left-color:#990000;background:linear-gradient(90deg,#d69999 0%,#efd6d6 34%,#fff 76%)"><div class="m">Louisiana <span class="at">at</span> <span class="rk">#14</span> USC</div><div class="r"><span class="t">10:00 PM</span><span class="s">USC -30.5</span></div></div>
+<div class="net" style="grid-row:3"><span>FS1</span><small>4 games</small></div>
+<div class="track" style="grid-row:3;grid-column:2/span 62"></div>
+<div class="game" style="grid-row:3;grid-column:2/span 13;border-left-color:#C6A867;background:linear-gradient(90deg,#e8dcc2 0%,#f6f1e7 34%,#fff 76%)"><div class="m">Wake Forest <span class="at">at</span> Purdue</div><div class="r"><span class="t">11:00 AM</span><span class="s">WAKE -4.5</span></div></div>
+<div class="game" style="grid-row:3;grid-column:16/span 13;border-left-color:#13294B;background:linear-gradient(90deg,#a1a9b7 0%,#d9dde2 34%,#fff 76%)"><div class="m">Duke <span class="at">at</span> Illinois</div><div class="r"><span class="t">2:30 PM</span><span class="s">ILLINOIS -6.5</span></div></div>
+<div class="game" style="grid-row:3;grid-column:30/span 12;border-left-color:#E41C38;background:linear-gradient(90deg,#f4a4af 0%,#fbdbdf 34%,#fff 76%)"><div class="m">Bowling Green <span class="at">at</span> Nebraska</div><div class="r"><span class="t">6:00 PM</span><span class="s">NEBRASKA -28.5</span></div></div>
+<div class="game" style="grid-row:3;grid-column:42/span 13;border-left-color:#003087;background:linear-gradient(90deg,#99accf 0%,#d6deec 34%,#fff 76%)"><div class="m">North Dakota State <span class="at">at</span> Air Force</div><div class="r"><span class="t">9:00 PM</span><span class="s">NDSU -3</span></div></div>
+<div class="net" style="grid-row:4"><span>CBS Sports Net</span><small>4 games</small></div>
+<div class="track" style="grid-row:4;grid-column:2/span 62"></div>
+<div class="game" style="grid-row:4;grid-column:2/span 13;border-left-color:#1C1C1C;background:linear-gradient(90deg,#a4a4a4 0%,#dbdbdb 34%,#fff 76%)"><div class="m">South Florida <span class="at">at</span> Army</div><div class="r"><span class="t">11:00 AM</span><span class="s">ARMY -3.5</span></div></div>
+<div class="game" style="grid-row:4;grid-column:16/span 13;border-left-color:#000E2F;background:linear-gradient(90deg,#999fac 0%,#d6d8de 34%,#fff 76%)"><div class="m">Maryland <span class="at">at</span> UConn</div><div class="r"><span class="t">2:30 PM</span><span class="s">MARYLAND -11.5</span></div></div>
+<div class="game" style="grid-row:4;grid-column:30/span 13;border-left-color:#1E4D2B;background:linear-gradient(90deg,#a5b8aa 0%,#dbe3dd 34%,#fff 76%)"><div class="m">Southern Utah <span class="at">at</span> Colorado State</div><div class="r"><span class="t">6:00 PM</span><span class="s">COLO STATE -20.5</span></div></div>
+<div class="game" style="grid-row:4;grid-column:44/span 13;border-left-color:#DB0032;background:linear-gradient(90deg,#f199ad 0%,#f9d6de 34%,#fff 76%)"><div class="m">Sacramento State <span class="at">at</span> Fresno State</div><div class="r"><span class="t">9:30 PM</span><span class="s">FRESNO STATE -18.5</span></div></div>
+<div class="net" style="grid-row:5"><span>ESPN</span><small>3 games</small></div>
+<div class="track" style="grid-row:5;grid-column:2/span 62"></div>
+<div class="game" style="grid-row:5;grid-column:2/span 13;border-left-color:#FF7300;background:linear-gradient(90deg,#ffc799 0%,#ffe9d6 34%,#fff 76%)"><div class="m"><span class="rk">#2</span> Oregon <span class="at">at</span> Oklahoma State</div><div class="r"><span class="t">11:00 AM</span><span class="s">OREGON -22.5</span></div></div>
+<div class="game" style="grid-row:5;grid-column:30/span 13;border-left-color:#B3A369;background:linear-gradient(90deg,#e1dac3 0%,#f3f0e7 34%,#fff 76%)"><div class="m"><span class="rk">#20</span> Tennessee <span class="at">at</span> Georgia Tech</div><div class="r"><span class="t">6:00 PM</span><span class="s">TENNESSEE -13.5</span></div></div>
+<div class="game" style="grid-row:5;grid-column:43/span 13;border-left-color:#CC0000;background:linear-gradient(90deg,#eb9999 0%,#f7d6d6 34%,#fff 76%)"><div class="m">Arkansas <span class="at">at</span> <span class="rk">#21</span> Utah</div><div class="r"><span class="t">9:15 PM</span><span class="s">UTAH -12.5</span></div></div>
+<div class="net" style="grid-row:6"><span>ABC</span><small>3 games</small></div>
+<div class="track" style="grid-row:6;grid-column:2/span 62"></div>
+<div class="game" style="grid-row:6;grid-column:2/span 13;border-left-color:#500000;background:linear-gradient(90deg,#b99999 0%,#e3d6d6 34%,#fff 76%)"><div class="m">Arizona State <span class="at">at</span> <span class="rk">#8</span> Texas A&M</div><div class="r"><span class="t">11:00 AM</span><span class="s">TEXAS A&M -14</span></div></div>
+<div class="game" style="grid-row:6;grid-column:16/span 13;border-left-color:#0033A0;background:linear-gradient(90deg,#99add9 0%,#d6def0 34%,#fff 76%)"><div class="m"><span class="rk">#13</span> Alabama <span class="at">at</span> Kentucky</div><div class="r"><span class="t">2:30 PM</span><span class="s">ALABAMA -10</span></div></div>
+<div class="game" style="grid-row:6;grid-column:32/span 13;border-left-color:#BF5700;background:linear-gradient(90deg,#e5bc99 0%,#f5e4d6 34%,#fff 76%)"><div class="m"><span class="rk">#1</span> Ohio State <span class="at">at</span> <span class="rk">#5</span> Texas</div><div class="r"><span class="t">6:30 PM</span><span class="s">TEXAS -1.5</span></div></div>
+<div class="net" style="grid-row:7"><span>ESPN2</span><small>3 games</small></div>
+<div class="track" style="grid-row:7;grid-column:2/span 62"></div>
+<div class="game" style="grid-row:7;grid-column:2/span 13;border-left-color:#9D2235;background:linear-gradient(90deg,#d8a7ae 0%,#efdcdf 34%,#fff 76%)"><div class="m"><span class="rk">#18</span> Penn State <span class="at">at</span> Temple</div><div class="r"><span class="t">11:00 AM</span><span class="s">PENN STATE -23.5</span></div></div>
+<div class="game" style="grid-row:7;grid-column:16/span 13;border-left-color:#003594;background:linear-gradient(90deg,#99aed4 0%,#d6dfee 34%,#fff 76%)"><div class="m">UCF <span class="at">at</span> Pitt</div><div class="r"><span class="t">2:30 PM</span><span class="s">PITT -7.5</span></div></div>
+<div class="game" style="grid-row:7;grid-column:33/span 13;border-left-color:#14213D;background:linear-gradient(90deg,#a1a6b1 0%,#d9dbe0 34%,#fff 76%)"><div class="m">Charlotte <span class="at">at</span> <span class="rk">#9</span> Ole Miss</div><div class="r"><span class="t">6:45 PM</span><span class="s">OLE MISS -47.5</span></div></div>
+<div class="net" style="grid-row:8"><span>ACC Network</span><small>3 games</small></div>
+<div class="track" style="grid-row:8;grid-column:2/span 62"></div>
+<div class="game" style="grid-row:8;grid-column:2/span 13;border-left-color:#7BAFD4;background:linear-gradient(90deg,#cadfee 0%,#eaf2f8 34%,#fff 76%)"><div class="m">East Tennessee State <span class="at">at</span> North Carolina</div><div class="r"><span class="t">11:00 AM</span><span class="s">UNC -35.5</span></div></div>
+<div class="game" style="grid-row:8;grid-column:16/span 13;border-left-color:#F76900;background:linear-gradient(90deg,#fcc399 0%,#fee7d6 34%,#fff 76%)"><div class="m">California <span class="at">at</span> Syracuse</div><div class="r"><span class="t">2:30 PM</span><span class="s">SYRACUSE -3</span></div></div>
+<div class="game" style="grid-row:8;grid-column:32/span 13;border-left-color:#F56600;background:linear-gradient(90deg,#fbc299 0%,#fde7d6 34%,#fff 76%)"><div class="m">Georgia Southern <span class="at">at</span> Clemson</div><div class="r"><span class="t">6:30 PM</span><span class="s">CLEMSON -21</span></div></div>
+<div class="net" style="grid-row:9"><span>The CW</span><small>3 games</small></div>
+<div class="track" style="grid-row:9;grid-column:2/span 62"></div>
+<div class="game" style="grid-row:9;grid-column:2/span 13;border-left-color:#630031;background:linear-gradient(90deg,#c199ad 0%,#e6d6de 34%,#fff 76%)"><div class="m">Old Dominion <span class="at">at</span> Virginia Tech</div><div class="r"><span class="t">11:00 AM</span><span class="s">VA TECH -17.5</span></div></div>
+<div class="game" style="grid-row:9;grid-column:16/span 13;border-left-color:#501214;background:linear-gradient(90deg,#b9a0a1 0%,#e3d9d9 34%,#fff 76%)"><div class="m">UTSA <span class="at">at</span> Texas State</div><div class="r"><span class="t">2:30 PM</span><span class="s">UTSA -1.5</span></div></div>
+<div class="game" style="grid-row:9;grid-column:44/span 13;border-left-color:#003366;background:linear-gradient(90deg,#99adc2 0%,#d6dee7 34%,#fff 76%)"><div class="m">Montana State <span class="at">at</span> Nevada</div><div class="r"><span class="t">9:30 PM</span><span class="s">MONTANA ST -5.5</span></div></div>
+<div class="net" style="grid-row:10"><span>ESPNU</span><small>3 games</small></div>
+<div class="track" style="grid-row:10;grid-column:2/span 62"></div>
+<div class="game" style="grid-row:10;grid-column:2/span 13;border-left-color:#592A8A;background:linear-gradient(90deg,#bdaad0 0%,#e4ddec 34%,#fff 76%)"><div class="m">Appalachian State <span class="at">at</span> East Carolina</div><div class="r"><span class="t">11:00 AM</span><span class="s">ECU -8.5</span></div></div>
+<div class="game" style="grid-row:10;grid-column:17/span 13;border-left-color:#00853E;background:linear-gradient(90deg,#99ceb2 0%,#d6ebe0 34%,#fff 76%)"><div class="m">UNLV <span class="at">at</span> North Texas</div><div class="r"><span class="t">2:45 PM</span><span class="s">UNLV -4.5</span></div></div>
+<div class="game" style="grid-row:10;grid-column:32/span 13;border-left-color:#003366;background:linear-gradient(90deg,#99adc2 0%,#d6dee7 34%,#fff 76%)"><div class="m">Navy <span class="at">at</span> Florida Atlantic</div><div class="r"><span class="t">6:30 PM</span><span class="s">NAVY -5.5</span></div></div>
+<div class="net" style="grid-row:11"><span>FOX</span><small>2 games</small></div>
+<div class="track" style="grid-row:11;grid-column:2/span 62"></div>
+<div class="game" style="grid-row:11;grid-column:2/span 13;border-left-color:#00274C;background:linear-gradient(90deg,#99a9b7 0%,#d6dce2 34%,#fff 76%)"><div class="m"><span class="rk">#10</span> Oklahoma <span class="at">at</span> <span class="rk">#16</span> Michigan</div><div class="r"><span class="t">11:00 AM</span><span class="s">OKLAHOMA -6</span></div></div>
+<div class="game" style="grid-row:11;grid-column:16/span 13;border-left-color:#002E5D;background:linear-gradient(90deg,#99abbe 0%,#d6dee5 34%,#fff 76%)"><div class="m">Arizona <span class="at">at</span> <span class="rk">#14</span> BYU</div><div class="r"><span class="t">2:30 PM</span><span class="s">BYU -7.5</span></div></div>
+<div class="net" style="grid-row:12"><span>TNT</span><small>1 game</small></div>
+<div class="track" style="grid-row:12;grid-column:2/span 62"></div>
+<div class="game" style="grid-row:12;grid-column:2/span 13;border-left-color:#512888;background:linear-gradient(90deg,#b9a9cf 0%,#e3ddec 34%,#fff 76%)"><div class="m">Washington State <span class="at">at</span> Kansas State</div><div class="r"><span class="t">11:00 AM</span><span class="s">K-STATE -17.5</span></div></div>
+<div class="net" style="grid-row:13"><span>SEC Network</span><small>3 games</small></div>
+<div class="track" style="grid-row:13;grid-column:2/span 62"></div>
+<div class="game" style="grid-row:13;grid-column:5/span 13;border-left-color:#BA0C2F;background:linear-gradient(90deg,#e39eac 0%,#f4d8de 34%,#fff 76%)"><div class="m">Western Kentucky <span class="at">at</span> <span class="rk">#3</span> Georgia</div><div class="r"><span class="t">11:45 AM</span><span class="s">GEORGIA -40.5</span></div></div>
+<div class="game" style="grid-row:13;grid-column:19/span 13;border-left-color:#866D4B;background:linear-gradient(90deg,#cfc5b7 0%,#ece8e2 34%,#fff 76%)"><div class="m">Delaware <span class="at">at</span> Vanderbilt</div><div class="r"><span class="t">3:15 PM</span><span class="s">VANDERBILT -20.5</span></div></div>
+<div class="game" style="grid-row:13;grid-column:33/span 13;border-left-color:#0C2340;background:linear-gradient(90deg,#9ea7b3 0%,#d8dce0 34%,#fff 76%)"><div class="m">Southern Miss <span class="at">at</span> Auburn</div><div class="r"><span class="t">6:45 PM</span><span class="s">AUBURN -30.5</span></div></div>
+<div class="net" style="grid-row:14"><span>NBC</span><small>2 games</small></div>
+<div class="track" style="grid-row:14;grid-column:2/span 62"></div>
+<div class="game" style="grid-row:14;grid-column:16/span 13;border-left-color:#0C2340;background:linear-gradient(90deg,#9ea7b3 0%,#d8dce0 34%,#fff 76%)"><div class="m">Rice <span class="at">at</span> <span class="rk">#4</span> Notre Dame</div><div class="r"><span class="t">2:30 PM</span><span class="s">NOTRE DAME -44.5</span></div></div>
+<div class="game" style="grid-row:14;grid-column:32/span 13;border-left-color:#1C1C1C;background:linear-gradient(90deg,#a4a4a4 0%,#dbdbdb 34%,#fff 76%)"><div class="m">Iowa State <span class="at">at</span> <span class="rk">#22</span> Iowa</div><div class="r"><span class="t">6:30 PM</span><span class="s">IOWA -14.5</span></div></div>
+<div class="net" style="grid-row:15"><span>CBS</span><small>2 games</small></div>
+<div class="track" style="grid-row:15;grid-column:2/span 62"></div>
+<div class="game" style="grid-row:15;grid-column:16/span 13;border-left-color:#7A0019;background:linear-gradient(90deg,#ca99a3 0%,#ead6da 34%,#fff 76%)"><div class="m">Mississippi State <span class="at">at</span> Minnesota</div><div class="r"><span class="t">2:30 PM</span><span class="s">MISS STATE -1.5</span></div></div>
+<div class="game" style="grid-row:15;grid-column:32/span 13;border-left-color:#DC4405;background:linear-gradient(90deg,#f1b49b 0%,#f9e1d7 34%,#fff 76%)"><div class="m"><span class="rk">#12</span> Texas Tech <span class="at">at</span> Oregon State</div><div class="r"><span class="t">6:30 PM</span><span class="s">TEXAS TECH -26.5</span></div></div>
+<div class="net" style="grid-row:16"><span>USA Network</span><small>1 game</small></div>
+<div class="track" style="grid-row:16;grid-column:2/span 62"></div>
+<div class="game" style="grid-row:16;grid-column:26/span 13;border-left-color:#0033A0;background:linear-gradient(90deg,#99add9 0%,#d6def0 34%,#fff 76%)"><div class="m">Memphis <span class="at">at</span> Boise State</div><div class="r"><span class="t">5:00 PM</span><span class="s">BOISE STATE -7.5</span></div></div>
+</div></div>
+
+  <div class="sec"><h2>Thursday, Sept 10</h2><p>One game.</p></div>
+  <table class="board"><thead><tr><th style="width:80px">Kickoff</th><th>Matchup</th><th style="width:150px">Where to watch</th><th style="width:168px">Spread</th></tr></thead><tbody><tr class="band"><td colspan="4">7:00 PM</td></tr>
+<tr style="border-left-color:#F47321;background:linear-gradient(90deg,#fbd2b8 0%,#feeee4 30%,#fff 62%)"><td class="tm">7:00 PM</td><td><div class="mu">Florida A&M <span class="at">at</span> <span class="rk">#7</span> Miami (Fla.)</div></td><td class="ch">ACC Network</td><td><span class="sp">MIAMI -53.5</span></td></tr></tbody></table>
+
+  <div class="sec"><h2>Friday, Sept 11</h2><p>5 games.</p></div>
+  <table class="board"><thead><tr><th style="width:80px">Kickoff</th><th>Matchup</th><th style="width:150px">Where to watch</th><th style="width:168px">Spread</th></tr></thead><tbody><tr class="band"><td colspan="4">6:00 PM</td></tr>
+<tr style="border-left-color:#AD0000;background:linear-gradient(90deg,#e5adad 0%,#f5e0e0 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Villanova <span class="at">at</span> <span class="rk">#24</span> Louisville</div></td><td class="ch">ACC Network</td><td><span class="sp">LOUISVILLE -36.5</span></td></tr>
+<tr style="border-left-color:#232D4B;background:linear-gradient(90deg,#b9bcc5 0%,#e5e6e9 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Norfolk State <span class="at">at</span> Virginia</div></td><td class="ch stream">ACCNX</td><td><span class="sp">VIRGINIA -43.5</span></td></tr>
+<tr style="border-left-color:#CC0000;background:linear-gradient(90deg,#efadad 0%,#f9e0e0 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Richmond <span class="at">at</span> NC State</div></td><td class="ch">ESPNU</td><td><span class="sp">NC STATE -30.5</span></td></tr>
+<tr class="band"><td colspan="4">6:30 PM</td></tr>
+<tr style="border-left-color:#98002E;background:linear-gradient(90deg,#deadbc 0%,#f3e0e6 30%,#fff 62%)"><td class="tm">6:30 PM</td><td><div class="mu">Rutgers <span class="at">at</span> Boston College</div></td><td class="ch">ESPN2</td><td><span class="sp">BC -3.5</span></td></tr>
+<tr class="band"><td colspan="4">7:00 PM</td></tr>
+<tr style="border-left-color:#0051BA;background:linear-gradient(90deg,#adc7e9 0%,#e0eaf7 30%,#fff 62%)"><td class="tm">7:00 PM</td><td><div class="mu"><span class="rk">#25</span> Missouri <span class="at">at</span> Kansas<span class="note">Road favorite</span></div></td><td class="ch">FOX</td><td><span class="sp">MISSOURI -6.5</span></td></tr></tbody></table>
+
+  <div class="sec"><h2>Saturday, Sept 12</h2><p>110 games &mdash; the whole day, linear and streaming.</p></div>
+  <table class="board"><thead><tr><th style="width:80px">Kickoff</th><th>Matchup</th><th style="width:150px">Where to watch</th><th style="width:168px">Spread</th></tr></thead><tbody><tr class="band"><td colspan="4">11:00 AM</td></tr>
+<tr style="border-left-color:#FF7300;background:linear-gradient(90deg,#ffd2ad 0%,#ffeee0 30%,#fff 62%)"><td class="tm">11:00 AM</td><td><div class="mu"><span class="rk">#2</span> Oregon <span class="at">at</span> Oklahoma State<span class="note">Road favorite</span></div></td><td class="ch">ESPN</td><td><span class="sp">OREGON -22.5</span></td></tr>
+<tr style="border-left-color:#00274C;background:linear-gradient(90deg,#adbac6 0%,#e0e5ea 30%,#fff 62%)"><td class="tm">11:00 AM</td><td><div class="mu"><span class="rk">#10</span> Oklahoma <span class="at">at</span> <span class="rk">#16</span> Michigan<span class="note">Road favorite</span></div></td><td class="ch">FOX</td><td><span class="sp">OKLAHOMA -6</span></td></tr>
+<tr style="border-left-color:#500000;background:linear-gradient(90deg,#c7adad 0%,#eae0e0 30%,#fff 62%)"><td class="tm">11:00 AM</td><td><div class="mu">Arizona State <span class="at">at</span> <span class="rk">#8</span> Texas A&M</div></td><td class="ch">ABC</td><td><span class="sp">TEXAS A&M -14</span></td></tr>
+<tr style="border-left-color:#990000;background:linear-gradient(90deg,#deadad 0%,#f3e0e0 30%,#fff 62%)"><td class="tm">11:00 AM</td><td><div class="mu">Howard <span class="at">at</span> <span class="rk">#6</span> Indiana</div></td><td class="ch">Big Ten Network</td><td><span class="sp">INDIANA -55.5</span></td></tr>
+<tr style="border-left-color:#9D2235;background:linear-gradient(90deg,#e0b8be 0%,#f3e4e7 30%,#fff 62%)"><td class="tm">11:00 AM</td><td><div class="mu"><span class="rk">#18</span> Penn State <span class="at">at</span> Temple<span class="note">Road favorite</span></div></td><td class="ch">ESPN2</td><td><span class="sp">PENN STATE -23.5</span></td></tr>
+<tr style="border-left-color:#512888;background:linear-gradient(90deg,#c7bad9 0%,#eae5f1 30%,#fff 62%)"><td class="tm">11:00 AM</td><td><div class="mu">Washington State <span class="at">at</span> Kansas State</div></td><td class="ch">TNT</td><td><span class="sp">K-STATE -17.5</span></td></tr>
+<tr style="border-left-color:#7BAFD4;background:linear-gradient(90deg,#d5e5f1 0%,#eff5fa 30%,#fff 62%)"><td class="tm">11:00 AM</td><td><div class="mu">East Tennessee State <span class="at">at</span> North Carolina</div></td><td class="ch">ACC Network</td><td><span class="sp">UNC -35.5</span></td></tr>
+<tr style="border-left-color:#630031;background:linear-gradient(90deg,#cdadbd 0%,#ece0e6 30%,#fff 62%)"><td class="tm">11:00 AM</td><td><div class="mu">Old Dominion <span class="at">at</span> Virginia Tech</div></td><td class="ch">The CW</td><td><span class="sp">VA TECH -17.5</span></td></tr>
+<tr style="border-left-color:#C6A867;background:linear-gradient(90deg,#ede3ce 0%,#f8f5ed 30%,#fff 62%)"><td class="tm">11:00 AM</td><td><div class="mu">Wake Forest <span class="at">at</span> Purdue<span class="note">Road favorite</span></div></td><td class="ch">FS1</td><td><span class="sp">WAKE -4.5</span></td></tr>
+<tr style="border-left-color:#1C1C1C;background:linear-gradient(90deg,#b6b6b6 0%,#e4e4e4 30%,#fff 62%)"><td class="tm">11:00 AM</td><td><div class="mu">South Florida <span class="at">at</span> Army</div></td><td class="ch">CBS Sports Net</td><td><span class="sp">ARMY -3.5</span></td></tr>
+<tr style="border-left-color:#592A8A;background:linear-gradient(90deg,#cabbda 0%,#ebe5f1 30%,#fff 62%)"><td class="tm">11:00 AM</td><td><div class="mu">Appalachian State <span class="at">at</span> East Carolina</div></td><td class="ch">ESPNU</td><td><span class="sp">ECU -8.5</span></td></tr>
+<tr style="border-left-color:#002664;background:linear-gradient(90deg,#adbacd 0%,#e0e5ec 30%,#fff 62%)"><td class="tm">11:00 AM</td><td><div class="mu">Wofford <span class="at">at</span> Kent State</div></td><td class="ch stream">ESPN+</td><td><span class="sp">KENT STATE -14.5</span></td></tr>
+<tr style="border-left-color:#A6192E;background:linear-gradient(90deg,#e3b5bc 0%,#f4e3e6 30%,#fff 62%)"><td class="tm">11:00 AM</td><td><div class="mu">Dickinson <span class="at">at</span> Davidson<span class="note">Division III visitor</span></div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr class="band"><td colspan="4">11:30 AM</td></tr>
+<tr style="border-left-color:#91002D;background:linear-gradient(90deg,#dcadbc 0%,#f2e0e6 30%,#fff 62%)"><td class="tm">11:30 AM</td><td><div class="mu">Marist <span class="at">at</span> Lafayette</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr class="band"><td colspan="4">11:45 AM</td></tr>
+<tr style="border-left-color:#BA0C2F;background:linear-gradient(90deg,#e9b1bc 0%,#f7e2e6 30%,#fff 62%)"><td class="tm">11:45 AM</td><td><div class="mu">Western Kentucky <span class="at">at</span> <span class="rk">#3</span> Georgia</div></td><td class="ch">SEC Network</td><td><span class="sp">GEORGIA -40.5</span></td></tr>
+<tr class="band"><td colspan="4">12:00 PM</td></tr>
+<tr style="border-left-color:#002855;background:linear-gradient(90deg,#adbac9 0%,#e0e5eb 30%,#fff 62%)"><td class="tm">12:00 PM</td><td><div class="mu">UT Martin <span class="at">at</span> West Virginia<span class="note">No line posted</span></div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#6A0032;background:linear-gradient(90deg,#cfadbd 0%,#ede0e6 30%,#fff 62%)"><td class="tm">12:00 PM</td><td><div class="mu">Colgate <span class="at">at</span> Central Michigan</div></td><td class="ch stream">ESPN+</td><td><span class="sp">CENTRAL MICH -26.5</span></td></tr>
+<tr style="border-left-color:#C41230;background:linear-gradient(90deg,#ecb3bd 0%,#f8e3e6 30%,#fff 62%)"><td class="tm">12:00 PM</td><td><div class="mu">Holy Cross <span class="at">at</span> Miami (Ohio)</div></td><td class="ch stream">ESPN+</td><td><span class="sp">MIAMI (OH) -33.5</span></td></tr>
+<tr class="band"><td colspan="4">12:30 PM</td></tr>
+<tr style="border-left-color:#C8102E;background:linear-gradient(90deg,#edb3bc 0%,#f8e2e6 30%,#fff 62%)"><td class="tm">12:30 PM</td><td><div class="mu">Bucknell <span class="at">at</span> VMI</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr class="band"><td colspan="4">1:00 PM</td></tr>
+<tr style="border-left-color:#BA0C2F;background:linear-gradient(90deg,#e9b1bc 0%,#f7e2e6 30%,#fff 62%)"><td class="tm">1:00 PM</td><td><div class="mu">Stony Brook <span class="at">at</span> Ball State</div></td><td class="ch stream">ESPN+</td><td><span class="sp">BALL STATE -15.5</span></td></tr>
+<tr style="border-left-color:#E00122;background:linear-gradient(90deg,#f5aeb8 0%,#fbe1e4 30%,#fff 62%)"><td class="tm">1:00 PM</td><td><div class="mu">Eastern Washington <span class="at">at</span> South Dakota</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#C8102E;background:linear-gradient(90deg,#edb3bc 0%,#f8e2e6 30%,#fff 62%)"><td class="tm">1:00 PM</td><td><div class="mu">Duquesne <span class="at">at</span> Youngstown State</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#653819;background:linear-gradient(90deg,#cebfb5 0%,#ede7e3 30%,#fff 62%)"><td class="tm">1:00 PM</td><td><div class="mu">William & Mary <span class="at">at</span> Lehigh</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#4B116F;background:linear-gradient(90deg,#c5b3d1 0%,#e9e2ee 30%,#fff 62%)"><td class="tm">1:00 PM</td><td><div class="mu">Drake <span class="at">at</span> Northern Iowa</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr class="band"><td colspan="4">2:00 PM</td></tr>
+<tr style="border-left-color:#7A232F;background:linear-gradient(90deg,#d4b9bc 0%,#efe5e6 30%,#fff 62%)"><td class="tm">2:00 PM</td><td><div class="mu">Utah Tech <span class="at">at</span> Montana</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr class="band"><td colspan="4">2:30 PM</td></tr>
+<tr style="border-left-color:#0C2340;background:linear-gradient(90deg,#b1b9c2 0%,#e2e5e8 30%,#fff 62%)"><td class="tm">2:30 PM</td><td><div class="mu">Rice <span class="at">at</span> <span class="rk">#4</span> Notre Dame</div></td><td class="ch">NBC</td><td><span class="sp">NOTRE DAME -44.5</span></td></tr>
+<tr style="border-left-color:#0033A0;background:linear-gradient(90deg,#adbee1 0%,#e0e7f4 30%,#fff 62%)"><td class="tm">2:30 PM</td><td><div class="mu"><span class="rk">#13</span> Alabama <span class="at">at</span> Kentucky<span class="note">Road favorite</span></div></td><td class="ch">ABC</td><td><span class="sp">ALABAMA -10</span></td></tr>
+<tr style="border-left-color:#002E5D;background:linear-gradient(90deg,#adbccb 0%,#e0e6ec 30%,#fff 62%)"><td class="tm">2:30 PM</td><td><div class="mu">Arizona <span class="at">at</span> <span class="rk">#14</span> BYU</div></td><td class="ch">FOX</td><td><span class="sp">BYU -7.5</span></td></tr>
+<tr style="border-left-color:#7A0019;background:linear-gradient(90deg,#d4adb5 0%,#efe0e3 30%,#fff 62%)"><td class="tm">2:30 PM</td><td><div class="mu">Mississippi State <span class="at">at</span> Minnesota<span class="note">Road favorite</span></div></td><td class="ch">CBS</td><td><span class="sp">MISS STATE -1.5</span></td></tr>
+<tr style="border-left-color:#4B2E83;background:linear-gradient(90deg,#c5bcd7 0%,#e9e6f0 30%,#fff 62%)"><td class="tm">2:30 PM</td><td><div class="mu">Utah State <span class="at">at</span> <span class="rk">#17</span> Washington</div></td><td class="ch">Big Ten Network</td><td><span class="sp">WASHINGTON -26.5</span></td></tr>
+<tr style="border-left-color:#18453B;background:linear-gradient(90deg,#b5c3c0 0%,#e3e9e7 30%,#fff 62%)"><td class="tm">2:30 PM</td><td><div class="mu">Eastern Michigan <span class="at">at</span> Michigan State<span class="note">Second BTN window</span></div></td><td class="ch">Big Ten Network</td><td><span class="sp">MICH STATE -17.5</span></td></tr>
+<tr style="border-left-color:#003594;background:linear-gradient(90deg,#adbedd 0%,#e0e7f2 30%,#fff 62%)"><td class="tm">2:30 PM</td><td><div class="mu">UCF <span class="at">at</span> Pitt</div></td><td class="ch">ESPN2</td><td><span class="sp">PITT -7.5</span></td></tr>
+<tr style="border-left-color:#F76900;background:linear-gradient(90deg,#fccfad 0%,#feede0 30%,#fff 62%)"><td class="tm">2:30 PM</td><td><div class="mu">California <span class="at">at</span> Syracuse</div></td><td class="ch">ACC Network</td><td><span class="sp">SYRACUSE -3</span></td></tr>
+<tr style="border-left-color:#13294B;background:linear-gradient(90deg,#b3bbc5 0%,#e3e5e9 30%,#fff 62%)"><td class="tm">2:30 PM</td><td><div class="mu">Duke <span class="at">at</span> Illinois</div></td><td class="ch">FS1</td><td><span class="sp">ILLINOIS -6.5</span></td></tr>
+<tr style="border-left-color:#000E2F;background:linear-gradient(90deg,#adb2bc 0%,#e0e2e6 30%,#fff 62%)"><td class="tm">2:30 PM</td><td><div class="mu">Maryland <span class="at">at</span> UConn<span class="note">Road favorite</span></div></td><td class="ch">CBS Sports Net</td><td><span class="sp">MARYLAND -11.5</span></td></tr>
+<tr style="border-left-color:#501214;background:linear-gradient(90deg,#c7b3b4 0%,#eae3e3 30%,#fff 62%)"><td class="tm">2:30 PM</td><td><div class="mu">UTSA <span class="at">at</span> Texas State<span class="note">Road favorite; books split</span></div></td><td class="ch">The CW</td><td><span class="sp">UTSA -1.5</span></td></tr>
+<tr style="border-left-color:#CFB87C;background:linear-gradient(90deg,#f0e8d5 0%,#f9f6ef 30%,#fff 62%)"><td class="tm">2:30 PM</td><td><div class="mu">Weber State <span class="at">at</span> Colorado</div></td><td class="ch stream">ESPN+</td><td><span class="sp">COLORADO -34</span></td></tr>
+<tr style="border-left-color:#1E6B52;background:linear-gradient(90deg,#b7d0c8 0%,#e4edea 30%,#fff 62%)"><td class="tm">2:30 PM</td><td><div class="mu">UL Monroe <span class="at">at</span> UAB</div></td><td class="ch stream">ESPN+</td><td><span class="sp">UAB -10.5</span></td></tr>
+<tr style="border-left-color:#041E42;background:linear-gradient(90deg,#afb7c3 0%,#e1e4e8 30%,#fff 62%)"><td class="tm">2:30 PM</td><td><div class="mu">Robert Morris <span class="at">at</span> Akron</div></td><td class="ch stream">ESPN+</td><td><span class="sp">AKRON -28.5</span></td></tr>
+<tr style="border-left-color:#15397F;background:linear-gradient(90deg,#b4c0d6 0%,#e3e7f0 30%,#fff 62%)"><td class="tm">2:30 PM</td><td><div class="mu">Central Connecticut <span class="at">at</span> Toledo</div></td><td class="ch stream">ESPN+</td><td><span class="sp">TOLEDO -35.5</span></td></tr>
+<tr style="border-left-color:#881C1C;background:linear-gradient(90deg,#d9b6b6 0%,#f1e4e4 30%,#fff 62%)"><td class="tm">2:30 PM</td><td><div class="mu">Sacred Heart <span class="at">at</span> UMass</div></td><td class="ch stream">ESPN+</td><td><span class="sp">UMASS -24.5</span></td></tr>
+<tr style="border-left-color:#450084;background:linear-gradient(90deg,#c3add8 0%,#e9e0f0 30%,#fff 62%)"><td class="tm">2:30 PM</td><td><div class="mu">Wagner <span class="at">at</span> James Madison</div></td><td class="ch stream">ESPN+</td><td><span class="sp">JMU -46.5</span></td></tr>
+<tr class="band"><td colspan="4">2:45 PM</td></tr>
+<tr style="border-left-color:#00853E;background:linear-gradient(90deg,#add8c1 0%,#e0f0e8 30%,#fff 62%)"><td class="tm">2:45 PM</td><td><div class="mu">UNLV <span class="at">at</span> North Texas<span class="note">Road favorite</span></div></td><td class="ch">ESPNU</td><td><span class="sp">UNLV -4.5</span></td></tr>
+<tr class="band"><td colspan="4">3:00 PM</td></tr>
+<tr style="border-left-color:#354CA1;background:linear-gradient(90deg,#bec6e1 0%,#e7eaf4 30%,#fff 62%)"><td class="tm">3:00 PM</td><td><div class="mu">UC Davis <span class="at">at</span> <span class="rk">#19</span> SMU<span class="note">No line posted</span></div></td><td class="ch stream">ACCNX</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#492F24;background:linear-gradient(90deg,#c5bcb9 0%,#e9e6e5 30%,#fff 62%)"><td class="tm">3:00 PM</td><td><div class="mu">Northern Colorado <span class="at">at</span> Wyoming</div></td><td class="ch stream">Mountain West+</td><td><span class="sp">WYOMING -23.5</span></td></tr>
+<tr style="border-left-color:#BA0C2F;background:linear-gradient(90deg,#e9b1bc 0%,#f7e2e6 30%,#fff 62%)"><td class="tm">3:00 PM</td><td><div class="mu">Mercyhurst <span class="at">at</span> New Mexico<span class="note">Division II visitor</span></div></td><td class="ch stream">Mountain West+</td><td><span class="sp">NEW MEXICO -41.5</span></td></tr>
+<tr style="border-left-color:#8A2432;background:linear-gradient(90deg,#dab9bd 0%,#f1e5e6 30%,#fff 62%)"><td class="tm">3:00 PM</td><td><div class="mu">Alabama State <span class="at">at</span> Troy</div></td><td class="ch stream">ESPN+</td><td><span class="sp">TROY -22.5</span></td></tr>
+<tr style="border-left-color:#B3A369;background:linear-gradient(90deg,#e7e2cf 0%,#f6f4ed 30%,#fff 62%)"><td class="tm">3:00 PM</td><td><div class="mu">Lamar <span class="at">at</span> Idaho</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr class="band"><td colspan="4">3:15 PM</td></tr>
+<tr style="border-left-color:#866D4B;background:linear-gradient(90deg,#d8d0c5 0%,#f0ede9 30%,#fff 62%)"><td class="tm">3:15 PM</td><td><div class="mu">Delaware <span class="at">at</span> Vanderbilt</div></td><td class="ch">SEC Network</td><td><span class="sp">VANDERBILT -20.5</span></td></tr>
+<tr class="band"><td colspan="4">4:00 PM</td></tr>
+<tr style="border-left-color:#C8102E;background:linear-gradient(90deg,#edb3bc 0%,#f8e2e6 30%,#fff 62%)"><td class="tm">4:00 PM</td><td><div class="mu">Morehead State <span class="at">at</span> Austin Peay</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#002454;background:linear-gradient(90deg,#adb9c8 0%,#e0e5ea 30%,#fff 62%)"><td class="tm">4:00 PM</td><td><div class="mu">Incarnate Word <span class="at">at</span> Northern Arizona</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr class="band"><td colspan="4">4:30 PM</td></tr>
+<tr style="border-left-color:#0021A5;background:linear-gradient(90deg,#adb8e2 0%,#e0e4f4 30%,#fff 62%)"><td class="tm">4:30 PM</td><td><div class="mu">Campbell <span class="at">at</span> Florida</div></td><td class="ch stream">SECN+</td><td><span class="sp">FLORIDA -49</span></td></tr>
+<tr class="band"><td colspan="4">5:00 PM</td></tr>
+<tr style="border-left-color:#0033A0;background:linear-gradient(90deg,#adbee1 0%,#e0e7f4 30%,#fff 62%)"><td class="tm">5:00 PM</td><td><div class="mu">Memphis <span class="at">at</span> Boise State</div></td><td class="ch">USA Network</td><td><span class="sp">BOISE STATE -7.5</span></td></tr>
+<tr style="border-left-color:#081E3F;background:linear-gradient(90deg,#b0b7c2 0%,#e1e4e8 30%,#fff 62%)"><td class="tm">5:00 PM</td><td><div class="mu">Buffalo <span class="at">at</span> Florida International</div></td><td class="ch stream">ESPN+</td><td><span class="sp">FIU -10.5</span></td></tr>
+<tr style="border-left-color:#00694E;background:linear-gradient(90deg,#adcfc6 0%,#e0edea 30%,#fff 62%)"><td class="tm">5:00 PM</td><td><div class="mu">Jacksonville State <span class="at">at</span> Ohio</div></td><td class="ch stream">ESPN+</td><td><span class="sp">OHIO -2.5</span></td></tr>
+<tr style="border-left-color:#0A254E;background:linear-gradient(90deg,#b1b9c6 0%,#e2e5ea 30%,#fff 62%)"><td class="tm">5:00 PM</td><td><div class="mu">Gardner-Webb <span class="at">at</span> Liberty</div></td><td class="ch stream">ESPN+</td><td><span class="sp">LIBERTY -27.5</span></td></tr>
+<tr style="border-left-color:#841617;background:linear-gradient(90deg,#d8b4b5 0%,#f0e3e3 30%,#fff 62%)"><td class="tm">5:00 PM</td><td><div class="mu">North Carolina A&T <span class="at">at</span> N.C. Central</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#F47820;background:linear-gradient(90deg,#fbd4b8 0%,#feefe4 30%,#fff 62%)"><td class="tm">5:00 PM</td><td><div class="mu">San Diego <span class="at">at</span> Idaho State</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#660000;background:linear-gradient(90deg,#ceadad 0%,#ede0e0 30%,#fff 62%)"><td class="tm">5:00 PM</td><td><div class="mu">Chattanooga <span class="at">at</span> Eastern Kentucky</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#003D7D;background:linear-gradient(90deg,#adc1d5 0%,#e0e8ef 30%,#fff 62%)"><td class="tm">5:00 PM</td><td><div class="mu">Charleston Southern <span class="at">at</span> The Citadel</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#13294B;background:linear-gradient(90deg,#b3bbc5 0%,#e3e5e9 30%,#fff 62%)"><td class="tm">5:00 PM</td><td><div class="mu">Franklin <span class="at">at</span> Butler<span class="note">Division III visitor</span></div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#FF6A13;background:linear-gradient(90deg,#ffcfb3 0%,#ffede3 30%,#fff 62%)"><td class="tm">5:00 PM</td><td><div class="mu">Furman <span class="at">at</span> Mercer</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr class="band"><td colspan="4">5:30 PM</td></tr>
+<tr style="border-left-color:#6C4023;background:linear-gradient(90deg,#d0c2b9 0%,#ede8e5 30%,#fff 62%)"><td class="tm">5:30 PM</td><td><div class="mu">Monmouth <span class="at">at</span> Western Michigan</div></td><td class="ch stream">ESPN+</td><td><span class="sp">WESTERN MICH -27.5</span></td></tr>
+<tr class="band"><td colspan="4">6:00 PM</td></tr>
+<tr style="border-left-color:#B3A369;background:linear-gradient(90deg,#e7e2cf 0%,#f6f4ed 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu"><span class="rk">#20</span> Tennessee <span class="at">at</span> Georgia Tech<span class="note">Road favorite</span></div></td><td class="ch">ESPN</td><td><span class="sp">TENNESSEE -13.5</span></td></tr>
+<tr style="border-left-color:#E41C38;background:linear-gradient(90deg,#f6b6bf 0%,#fce4e7 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Bowling Green <span class="at">at</span> Nebraska</div></td><td class="ch">FS1</td><td><span class="sp">NEBRASKA -28.5</span></td></tr>
+<tr style="border-left-color:#1E4D2B;background:linear-gradient(90deg,#b7c6bb 0%,#e4eae6 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Southern Utah <span class="at">at</span> Colorado State</div></td><td class="ch">CBS Sports Net</td><td><span class="sp">COLO STATE -20.5</span></td></tr>
+<tr style="border-left-color:#C8102E;background:linear-gradient(90deg,#edb3bc 0%,#f8e2e6 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Southern <span class="at">at</span> <span class="rk">#23</span> Houston</div></td><td class="ch stream">ESPN+</td><td><span class="sp">HOUSTON -50.5</span></td></tr>
+<tr style="border-left-color:#73000A;background:linear-gradient(90deg,#d2adb1 0%,#eee0e2 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Towson <span class="at">at</span> South Carolina</div></td><td class="ch stream">SECN+</td><td><span class="sp">SOUTH CAROLINA -42.5</span></td></tr>
+<tr style="border-left-color:#E00122;background:linear-gradient(90deg,#f5aeb8 0%,#fbe1e4 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Western Carolina <span class="at">at</span> Cincinnati</div></td><td class="ch stream">ESPN+</td><td><span class="sp">CINCINNATI -36.5</span></td></tr>
+<tr style="border-left-color:#FF8200;background:linear-gradient(90deg,#ffd7ad 0%,#fff0e0 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Tulsa <span class="at">at</span> Sam Houston<span class="note">Road favorite</span></div></td><td class="ch stream">ESPN+</td><td><span class="sp">TULSA -13.5</span></td></tr>
+<tr style="border-left-color:#C8102E;background:linear-gradient(90deg,#edb3bc 0%,#f8e2e6 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Illinois State <span class="at">at</span> Northern Illinois<span class="note">No line posted</span></div></td><td class="ch stream">Mountain West+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#006747;background:linear-gradient(90deg,#adcec4 0%,#e0ede9 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">South Alabama <span class="at">at</span> Tulane</div></td><td class="ch stream">ESPN+</td><td><span class="sp">TULANE -10.5</span></td></tr>
+<tr style="border-left-color:#CC092F;background:linear-gradient(90deg,#efb0bc 0%,#f9e1e6 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">West Georgia <span class="at">at</span> Arkansas State<span class="note">No line posted</span></div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#231F20;background:linear-gradient(90deg,#b9b7b8 0%,#e5e4e4 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Georgia State <span class="at">at</span> Kennesaw State</div></td><td class="ch stream">ESPN+</td><td><span class="sp">KENNESAW -8.5</span></td></tr>
+<tr style="border-left-color:#00B140;background:linear-gradient(90deg,#ade6c2 0%,#e0f6e8 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Middle Tennessee <span class="at">at</span> Marshall</div></td><td class="ch stream">ESPN+</td><td><span class="sp">MARSHALL -14</span></td></tr>
+<tr style="border-left-color:#5E0009;background:linear-gradient(90deg,#cbadb0 0%,#ece0e1 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Lindenwood <span class="at">at</span> Missouri State<span class="note">No line posted</span></div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#004B87;background:linear-gradient(90deg,#adc5d9 0%,#e0e9f1 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Indiana State <span class="at">at</span> Eastern Illinois</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#002144;background:linear-gradient(90deg,#adb8c3 0%,#e0e4e9 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Valparaiso <span class="at">at</span> Murray State</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#720000;background:linear-gradient(90deg,#d2adad 0%,#eee0e0 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">SE Missouri State <span class="at">at</span> Southern Illinois</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#522D80;background:linear-gradient(90deg,#c8bcd6 0%,#eae6f0 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Central Oklahoma <span class="at">at</span> Central Arkansas<span class="note">Division II visitor</span></div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#00693E;background:linear-gradient(90deg,#adcfc1 0%,#e0ede8 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">North Alabama <span class="at">at</span> SE Louisiana</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#00529B;background:linear-gradient(90deg,#adc8df 0%,#e0eaf3 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Tarleton State <span class="at">at</span> McNeese</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#A6192E;background:linear-gradient(90deg,#e3b5bc 0%,#f4e3e6 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">UT Rio Grande Valley <span class="at">at</span> Nicholls</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#4F2D7F;background:linear-gradient(90deg,#c7bcd6 0%,#eae6f0 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Samford <span class="at">at</span> Tennessee Tech</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#002F6C;background:linear-gradient(90deg,#adbcd0 0%,#e0e6ed 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Northwestern State <span class="at">at</span> East Texas A&M</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#003DA5;background:linear-gradient(90deg,#adc1e2 0%,#e0e8f4 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">Arkansas Baptist <span class="at">at</span> Houston Christian<span class="note">NAIA visitor</span></div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr style="border-left-color:#0033A0;background:linear-gradient(90deg,#adbee1 0%,#e0e7f4 30%,#fff 62%)"><td class="tm">6:00 PM</td><td><div class="mu">New Haven <span class="at">at</span> South Dakota State</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr class="band"><td colspan="4">6:15 PM</td></tr>
+<tr style="border-left-color:#2D68C4;background:linear-gradient(90deg,#bccfec 0%,#e6edf8 30%,#fff 62%)"><td class="tm">6:15 PM</td><td><div class="mu">San Diego State <span class="at">at</span> UCLA</div></td><td class="ch">Big Ten Network</td><td><span class="sp">UCLA -11.5</span></td></tr>
+<tr style="border-left-color:#C5050C;background:linear-gradient(90deg,#ecafb1 0%,#f8e1e2 30%,#fff 62%)"><td class="tm">6:15 PM</td><td><div class="mu">Western Illinois <span class="at">at</span> Wisconsin<span class="note">No line posted; second BTN window</span></div></td><td class="ch">Big Ten Network</td><td><span class="sp none">no line</span></td></tr>
+<tr class="band"><td colspan="4">6:30 PM</td></tr>
+<tr style="border-left-color:#BF5700;background:linear-gradient(90deg,#ebc9ad 0%,#f7ebe0 30%,#fff 62%)"><td class="tm">6:30 PM</td><td><div class="mu"><span class="rk">#1</span> Ohio State <span class="at">at</span> <span class="rk">#5</span> Texas<span class="note">Third meeting in 20 months</span></div></td><td class="ch">ABC</td><td><span class="sp">TEXAS -1.5</span></td></tr>
+<tr style="border-left-color:#DC4405;background:linear-gradient(90deg,#f4c3af 0%,#fbe9e1 30%,#fff 62%)"><td class="tm">6:30 PM</td><td><div class="mu"><span class="rk">#12</span> Texas Tech <span class="at">at</span> Oregon State<span class="note">Road favorite</span></div></td><td class="ch">CBS</td><td><span class="sp">TEXAS TECH -26.5</span></td></tr>
+<tr style="border-left-color:#1C1C1C;background:linear-gradient(90deg,#b6b6b6 0%,#e4e4e4 30%,#fff 62%)"><td class="tm">6:30 PM</td><td><div class="mu">Iowa State <span class="at">at</span> <span class="rk">#22</span> Iowa<span class="note">Cy-Hawk</span></div></td><td class="ch">NBC</td><td><span class="sp">IOWA -14.5</span></td></tr>
+<tr style="border-left-color:#F56600;background:linear-gradient(90deg,#fccead 0%,#feede0 30%,#fff 62%)"><td class="tm">6:30 PM</td><td><div class="mu">Georgia Southern <span class="at">at</span> Clemson</div></td><td class="ch">ACC Network</td><td><span class="sp">CLEMSON -21</span></td></tr>
+<tr style="border-left-color:#003366;background:linear-gradient(90deg,#adbece 0%,#e0e7ed 30%,#fff 62%)"><td class="tm">6:30 PM</td><td><div class="mu">Navy <span class="at">at</span> Florida Atlantic<span class="note">Road favorite</span></div></td><td class="ch">ESPNU</td><td><span class="sp">NAVY -5.5</span></td></tr>
+<tr style="border-left-color:#461D7C;background:linear-gradient(90deg,#c4b7d5 0%,#e9e4ef 30%,#fff 62%)"><td class="tm">6:30 PM</td><td><div class="mu">Louisiana Tech <span class="at">at</span> <span class="rk">#11</span> LSU</div></td><td class="ch stream">SECN+</td><td><span class="sp">LSU -34.5</span></td></tr>
+<tr style="border-left-color:#006F71;background:linear-gradient(90deg,#add1d2 0%,#e0eeee 30%,#fff 62%)"><td class="tm">6:30 PM</td><td><div class="mu">Fordham <span class="at">at</span> Coastal Carolina</div></td><td class="ch stream">ESPN+</td><td><span class="sp">COASTAL -31.5</span></td></tr>
+<tr class="band"><td colspan="4">6:45 PM</td></tr>
+<tr style="border-left-color:#14213D;background:linear-gradient(90deg,#b4b8c1 0%,#e3e4e8 30%,#fff 62%)"><td class="tm">6:45 PM</td><td><div class="mu">Charlotte <span class="at">at</span> <span class="rk">#9</span> Ole Miss</div></td><td class="ch">ESPN2</td><td><span class="sp">OLE MISS -47.5</span></td></tr>
+<tr style="border-left-color:#0C2340;background:linear-gradient(90deg,#b1b9c2 0%,#e2e5e8 30%,#fff 62%)"><td class="tm">6:45 PM</td><td><div class="mu">Southern Miss <span class="at">at</span> Auburn</div></td><td class="ch">SEC Network</td><td><span class="sp">AUBURN -30.5</span></td></tr>
+<tr class="band"><td colspan="4">7:00 PM</td></tr>
+<tr style="border-left-color:#154734;background:linear-gradient(90deg,#b4c4be 0%,#e3e9e7 30%,#fff 62%)"><td class="tm">7:00 PM</td><td><div class="mu">Prairie View A&M <span class="at">at</span> Baylor</div></td><td class="ch stream">ESPN+</td><td><span class="sp">BAYLOR -38.5</span></td></tr>
+<tr style="border-left-color:#4D1979;background:linear-gradient(90deg,#c6b5d4 0%,#eae3ef 30%,#fff 62%)"><td class="tm">7:00 PM</td><td><div class="mu">Grambling State <span class="at">at</span> TCU</div></td><td class="ch stream">ESPN+</td><td><span class="sp">TCU -44.5</span></td></tr>
+<tr style="border-left-color:#4E2A84;background:linear-gradient(90deg,#c6bbd8 0%,#eae5f0 30%,#fff 62%)"><td class="tm">7:00 PM</td><td><div class="mu">Stephen F. Austin <span class="at">at</span> Abilene Christian</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr class="band"><td colspan="4">8:00 PM</td></tr>
+<tr style="border-left-color:#041E42;background:linear-gradient(90deg,#afb7c3 0%,#e1e4e8 30%,#fff 62%)"><td class="tm">8:00 PM</td><td><div class="mu">Texas Southern <span class="at">at</span> UTEP</div></td><td class="ch stream">Mountain West+</td><td><span class="sp">UTEP -27.5</span></td></tr>
+<tr style="border-left-color:#0055A2;background:linear-gradient(90deg,#adc9e1 0%,#e0ebf4 30%,#fff 62%)"><td class="tm">8:00 PM</td><td><div class="mu">Cal Poly <span class="at">at</span> San Jose State</div></td><td class="ch stream">Mountain West+</td><td><span class="sp">SAN JOSE ST -20.5</span></td></tr>
+<tr class="band"><td colspan="4">9:00 PM</td></tr>
+<tr style="border-left-color:#003087;background:linear-gradient(90deg,#adbdd9 0%,#e0e6f1 30%,#fff 62%)"><td class="tm">9:00 PM</td><td><div class="mu">North Dakota State <span class="at">at</span> Air Force<span class="note">FCS road favorite</span></div></td><td class="ch">FS1</td><td><span class="sp">NDSU -3</span></td></tr>
+<tr style="border-left-color:#154734;background:linear-gradient(90deg,#b4c4be 0%,#e3e9e7 30%,#fff 62%)"><td class="tm">9:00 PM</td><td><div class="mu">North Dakota <span class="at">at</span> Portland State</div></td><td class="ch stream">ESPN+</td><td><span class="sp none">no line</span></td></tr>
+<tr class="band"><td colspan="4">9:15 PM</td></tr>
+<tr style="border-left-color:#CC0000;background:linear-gradient(90deg,#efadad 0%,#f9e0e0 30%,#fff 62%)"><td class="tm">9:15 PM</td><td><div class="mu">Arkansas <span class="at">at</span> <span class="rk">#21</span> Utah</div></td><td class="ch">ESPN</td><td><span class="sp">UTAH -12.5</span></td></tr>
+<tr class="band"><td colspan="4">9:30 PM</td></tr>
+<tr style="border-left-color:#DB0032;background:linear-gradient(90deg,#f3adbd 0%,#fbe0e6 30%,#fff 62%)"><td class="tm">9:30 PM</td><td><div class="mu">Sacramento State <span class="at">at</span> Fresno State</div></td><td class="ch">CBS Sports Net</td><td><span class="sp">FRESNO STATE -18.5</span></td></tr>
+<tr style="border-left-color:#003366;background:linear-gradient(90deg,#adbece 0%,#e0e7ed 30%,#fff 62%)"><td class="tm">9:30 PM</td><td><div class="mu">Montana State <span class="at">at</span> Nevada<span class="note">FCS road favorite</span></div></td><td class="ch">The CW</td><td><span class="sp">MONTANA ST -5.5</span></td></tr>
+<tr class="band"><td colspan="4">10:00 PM</td></tr>
+<tr style="border-left-color:#990000;background:linear-gradient(90deg,#deadad 0%,#f3e0e0 30%,#fff 62%)"><td class="tm">10:00 PM</td><td><div class="mu">Louisiana <span class="at">at</span> <span class="rk">#14</span> USC</div></td><td class="ch">Big Ten Network</td><td><span class="sp">USC -30.5</span></td></tr>
+<tr class="band"><td colspan="4">10:59 PM</td></tr>
+<tr style="border-left-color:#024731;background:linear-gradient(90deg,#aec4bd 0%,#e1e9e6 30%,#fff 62%)"><td class="tm">10:59 PM</td><td><div class="mu">New Mexico State <span class="at">at</span> Hawai'i<span class="note">Late kick; may slide to Sun 9/13</span></div></td><td class="ch stream">Mountain West+</td><td><span class="sp">HAWAI'I -9.5</span></td></tr></tbody></table>
+
+  <div class="foot">
+    <div><h3>The game of the week</h3>
+      <p><b>Ohio State at Texas</b>, 6:30 on ABC, is a pick'em &mdash; Texas by 1.5. Third meeting between them in 20 months; Ohio State won the other two, including 14-7 in Columbus last August. The total sits at just 48.5 for that reason.</p></div>
+    <div><h3>Road favorites, and there are a lot</h3>
+      <p>Eleven visitors are laying points, including <b>Oklahoma</b> at Michigan (&minus;6), <b>Oregon</b> at Oklahoma State (&minus;22.5), <b>Alabama</b> at Kentucky (&minus;10), <b>Tennessee</b> at Georgia Tech (&minus;13.5) and <b>Penn State</b> at Temple (&minus;23.5).</p></div>
+    <div><h3>Two FCS teams favored on the road</h3>
+      <p><b>North Dakota State</b> is a 3-point favorite at Air Force and <b>Montana State</b> lays 5.5 at Nevada. Three FCS teams already beat FBS opponents in Week 1.</p></div>
+    <div><h3>About the numbers</h3>
+      <p>Spreads are a multi-book consensus as of <b>Tuesday, Sept 8</b>, so they'll move all week. UTSA at Texas State is genuinely split &mdash; most books have UTSA by 1 to 1.5, a couple have Texas State. Check your own book.</p></div>
+    <div><h3>Games without a line</h3>
+      <p><b>36 games</b> have no consensus spread. Most involve a Division II, Division III or NAIA visitor. A handful of FCS matchups just aren't widely priced.</p></div>
+    <div><h3>On the rankings</h3>
+      <p>These are still the <b>preseason AP numbers</b> &mdash; the AP hasn't posted an updated poll yet, so a few look stale after Week 1.</p></div>
+    <div><h3>On the colors</h3>
+      <p>Each row fades out from its <b>home</b> team's primary color. These are close approximations, not official brand values, and a few schools with pale golds read faint by design.</p></div>
+    <div><h3>If you bet</h3>
+      <p>Set a number you're fine losing and stop there. 21+ where legal. Help is free and confidential at <b>1-800-GAMBLER</b>.</p></div>
+  </div>
+
+</div>
+</body>
+</html>
